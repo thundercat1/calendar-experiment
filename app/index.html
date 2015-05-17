@@ -26,17 +26,16 @@
           <!--th ng-repeat="day in data.timeSlots.days | filter: nearFuture(7)">
             {{dateFromJSON(day) | date: "EEEE MMM dd"}}
           </th-->
+          <th>Date</th>
           <th>Appointment Time</th>
           <th>Status</th>
           <th>Reserve</th>
         </tr>
       </thead>
       <tbody>
-        <!--tr ng-repeat="hour in data.timeSlots.hours">
-          <td ng-repeat="day in data.timeSlots.days | filter: nearFuture(7)">{{hour}}</td>
-       --> 
-        <tr ng-repeat="timeSlot in timeSlots">
-          <td>{{timeSlot.time}}</td>
+        <tr ng-repeat="timeSlot in timeSlots | filter: nearFuture(7)">
+          <td>{{dateFromJSON(timeSlot.time) | date: 'EEE MMM dd yyyy'}}</td>
+          <td>{{dateFromJSON(timeSlot.time) | date: 'h:mma'}}</td>
           <td>{{timeSlot.status}}</td>
           <td><button ng-click="reserve(timeSlot)" ng-show="isOpen(timeSlot)" class="btn btn-success">Reserve</button>
           

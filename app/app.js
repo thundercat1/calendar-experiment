@@ -12,12 +12,13 @@ app.controller("AppCtrl", function($scope, $firebaseArray) {
     return(new Date(Date.parse(jsonDate)))
   }
   
-  $scope.nearFuture = function(days){
-    return(function(JSONDate){
+  $scope.nearFuture = function(daysToInclude){
+    return(function(timeSlot){
+        JSONDate = timeSlot.time;
     	var day_length = 24*60*60*1000;
       var date = new Date(Date.parse(JSONDate))
       return (date > $scope.currentDate && 
-        (date - $scope.currentDate)/day_length < days)
+        (date - $scope.currentDate)/day_length < daysToInclude)
     })
   }
   
