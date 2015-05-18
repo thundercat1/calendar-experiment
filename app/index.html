@@ -17,15 +17,15 @@
     <div class="container">
     <div class="jumbotron">
       <h3>Calendar experiment</h3>
+<button class="btn" ng-click="login()">login</button>
+<button class="btn" ng-click="logout()">logout</button>
       {{hello}}
+      Welcome {{authData.google.displayName}}
     </div>
       <button class="btn" ng-click="resetFirebase()">Reset Firebase</button>
     <table class="table">
       <thead>
         <tr>
-          <!--th ng-repeat="day in data.timeSlots.days | filter: nearFuture(7)">
-            {{dateFromJSON(day) | date: "EEEE MMM dd"}}
-          </th-->
           <th>Date</th>
           <th>Appointment Time</th>
           <th>Status</th>
@@ -37,7 +37,8 @@
           <td>{{dateFromJSON(timeSlot.time) | date: 'EEE MMM dd yyyy'}}</td>
           <td>{{dateFromJSON(timeSlot.time) | date: 'h:mma'}}</td>
           <td>{{timeSlot.status}}</td>
-          <td><button ng-click="reserve(timeSlot)" ng-show="isOpen(timeSlot)" class="btn btn-success">Reserve</button>
+          <td><button ng-click="reserve(timeSlot)" ng-show="isOpen(timeSlot) && authData" class="btn btn-success">Reserve</button>
+          <td><button ng-click="login()" ng-show="isOpen(timeSlot) && !authData" class="btn btn-warning">Log In to Reserve Appointment</button>
           
          
       </tbody>

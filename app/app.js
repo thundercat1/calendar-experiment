@@ -1,13 +1,33 @@
 var app = angular.module("app", ["firebase"]);
-console.log('here')
-app.controller("AppCtrl", function($scope, $firebaseArray) {
-  console.log('hi');
+app.controller("AppCtrl", function($scope, $firebaseArray, $firebaseAuth) {
   var ref = new Firebase("https://calendar-experiment.firebaseio.com");
   $scope.timeSlots = $firebaseArray(ref.child('timeSlots'));
   $scope.hello="Hello!";
   $scope.currentDate = new Date();
-  console.log('made it');
   
+
+var auth = $firebaseAuth(ref);
+$scope.login = function(){
+  console.log('attempting login');
+  console.log(auth);
+  auth.$authWithOAuthPopup("google").then(function(authData) {
+    $scope.authData = ref.getAuth();
+    console.log("Logged in as:", authData.uid);
+    console.log("Authenticated successfully with payload:", authData);
+  }).catch(function(error) {
+    console.log("Authentication failed:", error);
+  });
+}
+
+$scope.authData = ref.getAuth();
+
+$scope.logout = function(){
+  ref.unauth();
+  $scope.authData = ref.getAuth();
+}
+//Automatically logout on refresh for dev purposes. REmove for production
+$scope.logout();
+
   $scope.dateFromJSON = function(jsonDate){
     return(new Date(Date.parse(jsonDate)))
   }
@@ -25,6 +45,9 @@ app.controller("AppCtrl", function($scope, $firebaseArray) {
   
   $scope.reserve = function(slot){
 		slot.status = 'reserved';
+	
+          slot.user = $scope.authData.uid,
+          slot.userName = $scope.authData.google.displayName
     $scope.timeSlots.$save(slot);
   }
 
@@ -50,7 +73,6 @@ app.controller("AppCtrl", function($scope, $firebaseArray) {
         var timeSlotObj = {
           'time': slot.toJSON(),
           'status': 'open',
-          'user': false
           };
         $scope.timeSlots.$add(timeSlotObj);
         $scope.timeSlots.$save(timeSlotObj);
