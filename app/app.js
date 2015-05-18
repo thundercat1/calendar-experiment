@@ -55,7 +55,7 @@ $scope.logout();
     return (slot.status == 'open')
   }
   
-  $scope.resetFirebase = function(){
+  $scope.populateFirebase = function(){
   	var working_hours = function(){
      hours = [9,10,11,12,13,14,15,16];
      return(hours)
